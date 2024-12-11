@@ -44,7 +44,7 @@ namespace ProjectsInfo.Models
         /// <summary>
         /// Использует систему управления версиями
         /// </summary>
-        public bool IsInVcs { get; set; }
+        public bool IsInGit { get; set; }
 
         //...
     }

@@ -3,14 +3,71 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:ProjectsInfo.ViewModels"
         xmlns:local="clr-namespace:ProjectsInfo"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         ShowInTaskbar="False"
         WindowStyle="ThreeDBorderWindow"
-        Title="Пути поиска" Height="400" Width="500">
-    <Grid>
-        
+        Title="Пути поиска проектов" 
+        Height="400" 
+        Width="500"
+        d:DataContext="{d:DesignInstance vm:LocationsViewModel}">
+    <Window.Resources>
+        <vm:LocationsViewModel x:Key="vm" />
+    </Window.Resources>
+
+    <Grid x:Name="Root" Margin="2" DataContext="{StaticResource vm}">
+        <Grid.Resources>
+            <Style TargetType="Button">
+                <Setter Property="Padding" Value="5,2" />
+                <Setter Property="Margin" Value="5" />
+            </Style>
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" Content="Новый путь:" />
+            <TextBox Grid.Column="1" Margin="5" Text="{Binding NewPathText, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Grid.Column="2" Content="Добавить" Command="{Binding AddNewPathCommand}" />
+        </Grid>
+
+        <ListView Grid.Row="1" ItemsSource="{Binding Paths}" HorizontalContentAlignment="Stretch">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Content="{Binding}" />
+                        <Button Grid.Column="1"
+                                Content="Удалить"
+                                Command="{Binding RemovePathCommand, Source={StaticResource vm}}"
+                                CommandParameter="{Binding}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <StackPanel Grid.Row="2" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right">
+            <Button Content="Сохранить" IsDefault="True" />
+            <Button Content="Закрыть" IsCancel="True" />
+        </StackPanel>
     </Grid>
 </Window>

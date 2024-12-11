@@ -4,10 +4,25 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjectsInfo"
+        xmlns:vm="clr-namespace:ProjectsInfo.ViewModels"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="Информация о проектах" Height="450" Width="800">
-    <Grid>
-        
+    <Window.Resources>
+        <vm:MainViewModel x:Key="vm" />
+    </Window.Resources>
+    
+    <Grid DataContext="{StaticResource vm}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ToolBar Grid.Row="0">
+            <Button Content="Сканировать" Command="{Binding ScanCommand}" />
+            <Button Content="Пути поиска" Command="{Binding EditLocationsCommand}" />
+        </ToolBar>
+
+        <ListView Grid.Row="1" />
     </Grid>
 </Window>

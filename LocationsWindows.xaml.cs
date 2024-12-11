@@ -11,11 +11,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ProjectsInfo.ViewModels;
 
 namespace ProjectsInfo
 {
     /// <summary>
-    /// Логика взаимодействия для LocationsWindows.xaml
+    /// Диалоговое окно списка путей поиска
     /// </summary>
     public partial class LocationsWindows : Window
     {
