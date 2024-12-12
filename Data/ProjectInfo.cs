@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectsInfo.Models
+namespace ProjectsInfo.Data
 {
     /// <summary>
     /// Информация о проекте

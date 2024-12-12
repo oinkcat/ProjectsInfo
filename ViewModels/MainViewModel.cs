@@ -34,7 +34,7 @@ namespace ProjectsInfo.ViewModels
 
         private void EditProjectLocations(object _)
         {
-            new LocationsWindows().ShowDialog();
+            new LocationsWindow().ShowDialog();
         }
     }
 }

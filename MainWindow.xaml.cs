@@ -29,7 +29,7 @@ namespace ProjectsInfo
         {
             base.OnInitialized(e);
 
-            new LocationsWindows().ShowDialog();
+            new LocationsWindow().ShowDialog();
         }
     }
 }

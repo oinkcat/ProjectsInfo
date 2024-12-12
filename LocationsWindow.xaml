@@ -1,4 +1,4 @@
-﻿<Window x:Class="ProjectsInfo.LocationsWindows"
+﻿<Window x:Class="ProjectsInfo.LocationsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -13,9 +13,10 @@
         Title="Пути поиска проектов" 
         Height="400" 
         Width="500"
-        d:DataContext="{d:DesignInstance vm:LocationsViewModel}">
+        d:DataContext="{d:DesignInstance vm:LocationsViewModel}"
+        x:Name="WindowItself">
     <Window.Resources>
-        <vm:LocationsViewModel x:Key="vm" />
+        <vm:LocationsViewModel x:Key="vm" Window="{x:Reference WindowItself}" />
     </Window.Resources>
 
     <Grid x:Name="Root" Margin="2" DataContext="{StaticResource vm}">
@@ -66,7 +67,7 @@
         <StackPanel Grid.Row="2" 
                     Orientation="Horizontal" 
                     HorizontalAlignment="Right">
-            <Button Content="Сохранить" IsDefault="True" />
+            <Button Content="Сохранить" IsDefault="True" Command="{Binding SavePathsCommand}" />
             <Button Content="Закрыть" IsCancel="True" />
         </StackPanel>
     </Grid>
