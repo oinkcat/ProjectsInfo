@@ -18,11 +18,18 @@ namespace ProjectsInfo
     /// <summary>
     /// Диалоговое окно списка путей поиска
     /// </summary>
-    public partial class LocationsWindow : Window
+    public partial class LocationsWindow : Window, IWindowActions
     {
         public LocationsWindow()
         {
             InitializeComponent();
+        }
+
+        /// <inheritdoc />
+        public void CloseDialogWithResult(bool success)
+        {
+            DialogResult = success;
+            Close();
         }
     }
 }

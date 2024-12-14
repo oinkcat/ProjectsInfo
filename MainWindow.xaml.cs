@@ -28,8 +28,6 @@ namespace ProjectsInfo
         protected override void OnInitialized(EventArgs e)
         {
             base.OnInitialized(e);
-
-            new LocationsWindow().ShowDialog();
         }
     }
 }

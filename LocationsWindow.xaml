@@ -16,7 +16,7 @@
         d:DataContext="{d:DesignInstance vm:LocationsViewModel}"
         x:Name="WindowItself">
     <Window.Resources>
-        <vm:LocationsViewModel x:Key="vm" Window="{x:Reference WindowItself}" />
+        <vm:LocationsViewModel x:Key="vm" WindowHelper="{x:Reference WindowItself}" />
     </Window.Resources>
 
     <Grid x:Name="Root" Margin="2" DataContext="{StaticResource vm}">
@@ -45,8 +45,11 @@
             <Button Grid.Column="2" Content="Добавить" Command="{Binding AddNewPathCommand}" />
         </Grid>
 
-        <ListView Grid.Row="1" ItemsSource="{Binding Paths}" HorizontalContentAlignment="Stretch">
-            <ListView.ItemTemplate>
+        <ListBox Grid.Row="1" 
+                 HorizontalContentAlignment="Stretch"
+                 ItemsSource="{Binding Paths}"
+                 SelectedItem="{Binding NewPathText}">
+            <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -61,8 +64,8 @@
                                 CommandParameter="{Binding}" />
                     </Grid>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
         <StackPanel Grid.Row="2" 
                     Orientation="Horizontal" 

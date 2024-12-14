@@ -19,9 +19,9 @@ namespace ProjectsInfo.ViewModels
         private readonly ProjectLocationsStore locationsStore;
 
         /// <summary>
-        /// Окно
+        /// Взаимодействие с окном
         /// </summary>
-        public LocationsWindow Window { get; set; }
+        public IWindowActions WindowHelper { get; set; }
 
         /// <summary>
         /// Пути поиска
@@ -70,15 +70,13 @@ namespace ProjectsInfo.ViewModels
 
         private async Task<IList<string>> LoadLocations()
         {
-            return await locationsStore.LoadLocations();
+            return await locationsStore.LoadLocationsAsync();
         }
 
         private async void SaveLocations(object _)
         {
-            await locationsStore.SaveLocations(Paths);
-
-            Window.DialogResult = true;
-            Window.Close();
+            await locationsStore.SaveLocationsAsync(Paths);
+            WindowHelper.CloseDialogWithResult(true);
         }
 
         private void AddNewPath(object _)

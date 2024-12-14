@@ -46,6 +46,9 @@ namespace ProjectsInfo.Data
         /// </summary>
         public bool IsInGit { get; set; }
 
-        //...
+        /// <summary>
+        /// Является ли частью решения Visual Studio
+        /// </summary>
+        public bool IsInSolution { get; set; }
     }
 }

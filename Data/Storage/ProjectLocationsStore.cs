@@ -18,7 +18,7 @@ namespace ProjectsInfo.Data.Storage
         /// Загрузить список расположений проектов
         /// </summary>
         /// <returns>Список, содержащий пути расположений проектов</returns>
-        public async Task<IList<string>> LoadLocations()
+        public async Task<IList<string>> LoadLocationsAsync()
         {
             string locationsFilePath = GetLocationsFilePath();
 
@@ -49,7 +49,7 @@ namespace ProjectsInfo.Data.Storage
         /// Сохранить пути расположения проектов
         /// </summary>
         /// <param name="locationPaths">Список, содержащий пути расположений проектов</param>
-        public async Task SaveLocations(IList<string> locationPaths)
+        public async Task SaveLocationsAsync(IList<string> locationPaths)
         {
             string locationsFilePath = GetLocationsFilePath();
 

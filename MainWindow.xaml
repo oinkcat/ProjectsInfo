@@ -11,6 +11,12 @@
     <Window.Resources>
         <vm:MainViewModel x:Key="vm" />
     </Window.Resources>
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Loaded" >
+            
+        </EventTrigger>
+    </Window.Triggers>
     
     <Grid DataContext="{StaticResource vm}">
         <Grid.RowDefinitions>
@@ -23,6 +29,19 @@
             <Button Content="Пути поиска" Command="{Binding EditLocationsCommand}" />
         </ToolBar>
 
-        <ListView Grid.Row="1" />
+        <ListBox Grid.Row="1" ItemsSource="{Binding FoundProjects}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <Label Margin="0,5" 
+                               FontSize="14" 
+                               FontWeight="Bold"
+                               Content="{Binding Name}" />
+
+                        <Label Content="{Binding Directory}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </Window>
