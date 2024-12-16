@@ -7,6 +7,15 @@ using System.Threading.Tasks;
 namespace ProjectsInfo.Data
 {
     /// <summary>
+    /// Тип построенного приложения
+    /// </summary>
+    public enum BuiltOutputType
+    {
+        Library,
+        Executable
+    }
+
+    /// <summary>
     /// Информация о проекте
     /// </summary>
     public class ProjectInfo
@@ -27,6 +36,11 @@ namespace ProjectsInfo.Data
         public string MainLanguage { get; set; }
 
         /// <summary>
+        /// Целевая среда
+        /// </summary>
+        public string TargetFramework { get; set; }
+
+        /// <summary>
         /// Дата создания
         /// </summary>
         public DateTime CreateDate { get; set; }
@@ -40,6 +54,11 @@ namespace ProjectsInfo.Data
         /// Дата последней модификации артефактов сборки
         /// </summary>
         public DateTime LastBuildDate { get; set; }
+
+        /// <summary>
+        /// Тип приложения
+        /// </summary>
+        public BuiltOutputType OutputType { get; set; }
 
         /// <summary>
         /// Использует систему управления версиями

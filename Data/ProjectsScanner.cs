@@ -12,7 +12,17 @@ namespace ProjectsInfo.Data
     /// </summary>
     internal class ProjectsScanner
     {
+        private class ScanContext
+        {
+            public bool IsInSolution { get; set; }
+
+            public bool IsInGit { get; set; }
+        }
+
         private const int ProjectScanDepth = 2;
+
+        private const string GitDirectoryName = ".git";
+        private const string SolutionExtension = ".sln";
 
         private readonly IEnumerable<string> projectLocations;
 
@@ -36,32 +46,52 @@ namespace ProjectsInfo.Data
             isBusy = true;
             progressReporter = progress;
 
-            foreach(string location in projectLocations)
+            await Task.Run(() =>
             {
-                await FindProjectsInLocation(new DirectoryInfo(location), 0);
-            }
+                foreach (string location in projectLocations)
+                {
+                    var scanCtx = new ScanContext();
+                    ScanProjects(new DirectoryInfo(location), 0, scanCtx);
+                }
+            });
 
             isBusy = false;
         }
 
-        private async Task FindProjectsInLocation(DirectoryInfo location, int depth)
+        // Сканировать проекты в заданном каталоге с определенной глубиной поиска
+        private void ScanProjects(DirectoryInfo location, int depth, ScanContext ctx)
         {
             const string ProjectFilePattern = "*.*proj";
 
             if(depth > ProjectScanDepth) { return; }
 
+            // Принадлежность к решению и git репозиторию
+            if(Directory.Exists(Path.Combine(location.FullName, GitDirectoryName)))
+            {
+                ctx.IsInGit = true;
+            }
+
+            if(location.GetFiles(String.Concat('*', SolutionExtension)).Any())
+            {
+                ctx.IsInSolution = true;
+            }
+
             // Файлы проекта
             foreach (var projFile in location.GetFiles(ProjectFilePattern))
             {
                 var projectInfoAnalyzer = new VSProjectAnalyzer(projFile.FullName);
-                var projectInfo = await projectInfoAnalyzer.GetProjectInfoAsync();
+
+                var projectInfo = projectInfoAnalyzer.GetProjectInfo();
+                projectInfo.IsInGit = ctx.IsInGit;
+                projectInfo.IsInSolution = ctx.IsInSolution;
+
                 progressReporter.Report(projectInfo);
             }
 
             // Подкаталоги
             foreach(var subDirectory in location.GetDirectories())
             {
-                await FindProjectsInLocation(subDirectory, depth + 1);
+                ScanProjects(subDirectory, depth + 1, ctx);
             }
         }
     }
