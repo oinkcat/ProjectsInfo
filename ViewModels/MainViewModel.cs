@@ -25,9 +25,19 @@ namespace ProjectsInfo.ViewModels
         public ObservableCollection<ProjectInfo> FoundProjects { get; private set; }
 
         /// <summary>
+        /// Число найденных проектов
+        /// </summary>
+        public int NumberOfProjectsFound => FoundProjects.Count;
+
+        /// <summary>
         /// Горово к сканированию
         /// </summary>
         public bool IsReady => ScanCommand.IsEnabled;
+
+        /// <summary>
+        /// Происходит сканирование
+        /// </summary>
+        public bool IsScanning => !IsReady;
 
         /// <summary>
         /// Фильтр по имени проекта
@@ -92,6 +102,7 @@ namespace ProjectsInfo.ViewModels
             ScanCommand.IsEnabled = false;
             NameFilterText = String.Empty;
             ModelItemChanged(nameof(IsReady));
+            ModelItemChanged(nameof(IsScanning));
             ModelItemChanged(nameof(NameFilterText));
             FoundProjects.Clear();
 
@@ -105,11 +116,13 @@ namespace ProjectsInfo.ViewModels
 
             ScanCommand.IsEnabled = true;
             ModelItemChanged(nameof(IsReady));
+            ModelItemChanged(nameof(IsScanning));
         }
 
         private void NewProjectInfoScanned(ProjectInfo info)
         {
             FoundProjects.Add(info);
+            ModelItemChanged(nameof(NumberOfProjectsFound));
         }
 
         private void EditProjectLocations(object _)
@@ -143,6 +156,7 @@ namespace ProjectsInfo.ViewModels
 
             FoundProjects = new ObservableCollection<ProjectInfo>(resultProjects);
             ModelItemChanged(nameof(FoundProjects));
+            ModelItemChanged(nameof(NumberOfProjectsFound));
         }
 
         private void ModelItemChanged(string name)
