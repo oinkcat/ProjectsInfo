@@ -71,6 +71,11 @@ namespace ProjectsInfo.Data.Analyzers
                 var maxObjDate = FindLatestFileModifyDate(objDir, null);
 
                 info.LastBuildDate = maxBinDate > maxObjDate ? maxBinDate : maxObjDate;
+
+                if(info.LastBuildDate == DateTime.MinValue)
+                {
+                    info.LastBuildDate = null;
+                }
             }
 
             return info;

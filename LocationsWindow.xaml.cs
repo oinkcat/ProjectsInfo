@@ -18,7 +18,7 @@ namespace ProjectsInfo
     /// <summary>
     /// Диалоговое окно списка путей поиска
     /// </summary>
-    public partial class LocationsWindow : Window, IWindowActions
+    public partial class LocationsWindow : Window, IDialogActions
     {
         public LocationsWindow()
         {

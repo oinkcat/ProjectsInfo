@@ -21,7 +21,7 @@ namespace ProjectsInfo.ViewModels
         /// <summary>
         /// Взаимодействие с окном
         /// </summary>
-        public IWindowActions WindowHelper { get; set; }
+        public IDialogActions WindowHelper { get; set; }
 
         /// <summary>
         /// Пути поиска

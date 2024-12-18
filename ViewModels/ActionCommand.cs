@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,8 @@ namespace ProjectsInfo.ViewModels
     /// </summary>
     internal class ActionCommand : ICommand
     {
+        private bool isInDesigner = !(App.Current is App);
+
         public event EventHandler CanExecuteChanged;
 
         private readonly Action<object> commandAction;
@@ -35,13 +38,19 @@ namespace ProjectsInfo.ViewModels
         public ActionCommand(Action<object> action, bool enabled = true)
         {
             commandAction = action;
-            IsEnabled = enabled;
+            IsEnabled = !isInDesigner && enabled;
         }
 
         /// <inheritdoc />
-        public bool CanExecute(object parameter) => IsEnabled;
+        public bool CanExecute(object parameter) => !isInDesigner && IsEnabled;
 
         /// <inheritdoc />
-        public void Execute(object parameter) => commandAction(parameter);
+        public void Execute(object parameter)
+        {
+            if(!isInDesigner)
+            {
+                commandAction(parameter);
+            }
+        }
     }
 }

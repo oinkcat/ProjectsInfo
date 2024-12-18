@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>main_icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -61,7 +64,7 @@
     <Compile Include="ViewModels\ActionCommand.cs" />
     <Compile Include="ViewModels\LocationsViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\IWindowActions.cs" />
+    <Compile Include="ViewModels\IDialogActions.cs" />
     <Page Include="LocationsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -109,6 +112,31 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\git.png" />
+    <Resource Include="Resources\sol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\find.png" />
+    <Resource Include="Resources\locations.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="find.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="locations.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\main_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="main_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\main_icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="main_icon.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

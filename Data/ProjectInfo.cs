@@ -53,7 +53,7 @@ namespace ProjectsInfo.Data
         /// <summary>
         /// Дата последней модификации артефактов сборки
         /// </summary>
-        public DateTime LastBuildDate { get; set; }
+        public DateTime? LastBuildDate { get; set; }
 
         /// <summary>
         /// Тип приложения

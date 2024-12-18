@@ -14,7 +14,7 @@
         Height="400" 
         Width="500"
         d:DataContext="{d:DesignInstance vm:LocationsViewModel}"
-        x:Name="WindowItself">
+        x:Name="WindowItself" Icon="/locations.png">
     <Window.Resources>
         <vm:LocationsViewModel x:Key="vm" WindowHelper="{x:Reference WindowItself}" />
     </Window.Resources>
@@ -48,7 +48,7 @@
         <ListBox Grid.Row="1" 
                  HorizontalContentAlignment="Stretch"
                  ItemsSource="{Binding Paths}"
-                 SelectedItem="{Binding NewPathText}">
+                 SelectedItem="{Binding NewPathText}" d:ItemsSource="{d:SampleData ItemCount=5}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
