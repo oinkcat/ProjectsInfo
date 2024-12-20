@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-using System.Xml;
-using System.Runtime.ExceptionServices;
 
 namespace ProjectsInfo.Data.Analyzers
 {
@@ -16,7 +13,16 @@ namespace ProjectsInfo.Data.Analyzers
     {
         private const string ProjFileSuffix = "proj";
         private const string ProjXmlPropertyNodeName = "PropertyGroup";
-        
+
+        private readonly static string[] webRelatedPropNameParts =
+        {
+            "IISExpress",
+            "Nodejs",
+            "NodeJs",
+            "WebBrowser",
+            "SpaRoot"
+        };
+
         private readonly string projectFileName;
 
         private readonly ProjectInfo info;
@@ -84,18 +90,24 @@ namespace ProjectsInfo.Data.Analyzers
         private void CollectInfoFromProjXmlFile()
         {
             var xProjDocument = XDocument.Load(projectFileName);
+            var sdkAttr = xProjDocument.Root.Attribute(XName.Get("Sdk"));
+            bool probablyWebApp = (sdkAttr != null) && sdkAttr.Value.EndsWith(".Web");
 
-            var xPropertyElems = xProjDocument.Descendants(XName.Get(ProjXmlPropertyNodeName))
+            var xPropertyElems = xProjDocument.Root
+                .Elements()
+                .Where(e => e.Name.LocalName.Equals(ProjXmlPropertyNodeName))
                 .SelectMany(e => e.Elements())
                 .ToList();
 
             foreach(var xPropElem in xPropertyElems)
             {
-                string propValue = xPropElem.Value;
+                var (propName, propValue) = (xPropElem.Name.LocalName, xPropElem.Value);
 
-                switch(xPropElem.Name.LocalName)
+                switch(propName)
                 {
                     case "TargetFramework":
+                    case "TargetFrameworks":
+                    case "TargetFrameworkVersion":
                         info.TargetFramework = propValue;
                         break;
 
@@ -109,7 +121,19 @@ namespace ProjectsInfo.Data.Analyzers
                     case "AssemblyName":
                         info.Name = propValue;
                         break;
+
+                    default:
+                        if(webRelatedPropNameParts.Any(n => propName.Contains(n)))
+                        {
+                            probablyWebApp = true;
+                        }
+                        break;
                 };
+            }
+
+            if((info.OutputType != BuiltOutputType.Executable) && probablyWebApp)
+            {
+                info.OutputType = BuiltOutputType.WebApp;
             }
         }
 
