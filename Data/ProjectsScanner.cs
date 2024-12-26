@@ -26,6 +26,8 @@ namespace ProjectsInfo.Data
 
         private readonly IEnumerable<string> projectLocations;
 
+        private readonly ProjectRecognizer recognizer;
+
         private bool isBusy;
 
         private IProgress<ProjectInfo> progressReporter;
@@ -33,6 +35,7 @@ namespace ProjectsInfo.Data
         public ProjectsScanner(IEnumerable<string> locations)
         {
             projectLocations = locations;
+            recognizer = new ProjectRecognizer();
         }
 
         /// <summary>
@@ -61,8 +64,6 @@ namespace ProjectsInfo.Data
         // Сканировать проекты в заданном каталоге с определенной глубиной поиска
         private void ScanProjects(DirectoryInfo location, int depth, ScanContext ctx)
         {
-            const string ProjectFilePattern = "*.*proj";
-
             if(depth > ProjectScanDepth) { return; }
 
             // Принадлежность к решению и git репозиторию
@@ -76,11 +77,11 @@ namespace ProjectsInfo.Data
                 ctx.IsInSolution = true;
             }
 
-            // Файлы проекта
-            foreach (var projFile in location.GetFiles(ProjectFilePattern))
-            {
-                var projectInfoAnalyzer = new VSProjectAnalyzer(projFile.FullName);
+            // Определить тип проекта в каталоге и проанализировать его
+            var projectInfoAnalyzer = recognizer.GetAnalyzerForKnownProject(location);
 
+            if(projectInfoAnalyzer != null)
+            {
                 var projectInfo = projectInfoAnalyzer.GetProjectInfo();
                 projectInfo.IsInGit = ctx.IsInGit;
                 projectInfo.IsInSolution = ctx.IsInSolution;

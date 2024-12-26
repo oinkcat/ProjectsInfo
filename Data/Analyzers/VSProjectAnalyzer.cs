@@ -9,7 +9,7 @@ namespace ProjectsInfo.Data.Analyzers
     /// <summary>
     /// Собирает информацию о проектах в стиле Visual Studio
     /// </summary>
-    internal class VSProjectAnalyzer
+    internal class VSProjectAnalyzer : BaseProjectAnalyzer
     {
         private const string ProjFileSuffix = "proj";
         private const string ProjXmlPropertyNodeName = "PropertyGroup";
@@ -23,28 +23,15 @@ namespace ProjectsInfo.Data.Analyzers
             "SpaRoot"
         };
 
-        private readonly string projectFileName;
-
-        private readonly ProjectInfo info;
-
-        public VSProjectAnalyzer(string projFileName)
-        {
-            projectFileName = projFileName;
-
-            info = new ProjectInfo
-            {
-                Directory = Path.GetDirectoryName(projFileName),
-                CreateDate = DateTime.MaxValue
-            };
-        }
+        public VSProjectAnalyzer(string projFileName) : base(projFileName) { }
 
         /// <summary>
         /// Получить детальную информацию о проекте
         /// </summary>
-        public ProjectInfo GetProjectInfo()
+        public override ProjectInfo GetProjectInfo()
         {
             // Основная информация  проекте
-            string projFileExt = Path.GetExtension(projectFileName);
+            string projFileExt = Path.GetExtension(projectInfoFileName);
             int projLangIdLength = projFileExt.Length - ProjFileSuffix.Length;
             info.MainLanguage = projFileExt.Substring(0, projLangIdLength).TrimStart('.');
 
@@ -52,11 +39,11 @@ namespace ProjectsInfo.Data.Analyzers
             
             if(String.IsNullOrEmpty(info.Name))
             {
-                info.Name = Path.GetFileNameWithoutExtension(projectFileName);
+                info.Name = Path.GetFileNameWithoutExtension(projectInfoFileName);
             }
 
             // Ближайшая дата изменения файлов данных
-            var projectBaseDir = Directory.GetParent(projectFileName);
+            var projectBaseDir = Directory.GetParent(projectInfoFileName);
 
             string[] binaryDirs =
             {
@@ -89,7 +76,7 @@ namespace ProjectsInfo.Data.Analyzers
 
         private void CollectInfoFromProjXmlFile()
         {
-            var xProjDocument = XDocument.Load(projectFileName);
+            var xProjDocument = XDocument.Load(projectInfoFileName);
             var sdkAttr = xProjDocument.Root.Attribute(XName.Get("Sdk"));
             bool probablyWebApp = (sdkAttr != null) && sdkAttr.Value.EndsWith(".Web");
 
@@ -135,37 +122,6 @@ namespace ProjectsInfo.Data.Analyzers
             {
                 info.OutputType = BuiltOutputType.WebApp;
             }
-        }
-
-        private DateTime FindLatestFileModifyDate(DirectoryInfo dir, ISet<string> excludeDirs)
-        {
-            if(!dir.Exists) { return DateTime.MinValue; }
-
-            var maxFileModifyDate = DateTime.MinValue;
-            var filesInDir = dir.GetFiles();
-
-            if(filesInDir.Any())
-            {
-                maxFileModifyDate = filesInDir.Max(f => f.LastWriteTime);
-
-                var minCreateDate = filesInDir.Min(f => f.CreationTime);
-                info.CreateDate = (minCreateDate < info.CreateDate)
-                    ? minCreateDate
-                    : info.CreateDate;
-            }
-
-            foreach(var subDir in dir.EnumerateDirectories())
-            {
-                if(subDir.Name.StartsWith(".")) { continue; }
-                if(excludeDirs?.Contains(subDir.FullName) ?? false) { continue; }
-
-                var maxModifyDateInSubDir = FindLatestFileModifyDate(subDir, excludeDirs);
-                maxFileModifyDate = (maxModifyDateInSubDir > maxFileModifyDate)
-                    ? maxModifyDateInSubDir
-                    : maxFileModifyDate;
-            }
-
-            return maxFileModifyDate;
         }
     }
 }

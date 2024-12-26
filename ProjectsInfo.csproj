@@ -73,7 +73,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Data\Analyzers\BaseProjectAnalyzer.cs" />
     <Compile Include="Data\Analyzers\VSProjectAnalyzer.cs" />
+    <Compile Include="Data\ProjectRecognizer.cs" />
     <Compile Include="Data\ProjectsScanner.cs" />
     <Compile Include="Data\Storage\ProjectLocationsStore.cs" />
     <Compile Include="ViewModels\ActionCommand.cs" />
