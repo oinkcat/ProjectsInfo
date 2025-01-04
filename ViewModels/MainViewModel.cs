@@ -13,7 +13,7 @@ namespace ProjectsInfo.ViewModels
     /// <summary>
     /// Модель представления главного окна
     /// </summary>
-    internal class MainViewModel : INotifyPropertyChanged
+    internal class MainViewModel : BaseViewModel
     {
         private string nameFilter;
 
@@ -67,9 +67,6 @@ namespace ProjectsInfo.ViewModels
         /// Команда открытия каталога проекта
         /// </summary>
         public ActionCommand OpenProjectDirectoryCommand { get; }
-
-        /// <inheritdoc />
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public MainViewModel()
         {
@@ -157,11 +154,6 @@ namespace ProjectsInfo.ViewModels
             FoundProjects = new ObservableCollection<ProjectInfo>(resultProjects);
             ModelItemChanged(nameof(FoundProjects));
             ModelItemChanged(nameof(NumberOfProjectsFound));
-        }
-
-        private void ModelItemChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }
