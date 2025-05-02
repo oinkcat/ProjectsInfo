@@ -51,11 +51,11 @@ namespace ProjectsInfo.Data
 
             await Task.Run(() =>
             {
-                foreach (string location in projectLocations)
+                Parallel.ForEach(projectLocations, location =>
                 {
                     var scanCtx = new ScanContext();
                     ScanProjects(new DirectoryInfo(location), 0, scanCtx);
-                }
+                });
             });
 
             isBusy = false;

@@ -45,7 +45,7 @@ namespace ProjectsInfo.Data
                 bool fileFound = infoFile != null;
 
                 bool dirFound = String.IsNullOrEmpty(traits.ProjectDirectory) ||
-                    dir.EnumerateDirectories(traits.ProjectDirectory).Any();
+                                dir.EnumerateDirectories(traits.ProjectDirectory).Any();
 
                 if(fileFound && dirFound)
                 {
