@@ -14,9 +14,11 @@ namespace ProjectsInfo.Data
     {
         private class ScanContext
         {
-            public bool IsInSolution { get; set; }
+            public string SolutionName { get; set; }
 
             public bool IsInGit { get; set; }
+
+            public bool IsInSolution => !String.IsNullOrEmpty(SolutionName);
         }
 
         private const int ProjectScanDepth = 2;
@@ -72,9 +74,10 @@ namespace ProjectsInfo.Data
                 ctx.IsInGit = true;
             }
 
-            if(location.GetFiles(String.Concat('*', SolutionExtension)).Any())
+            var slnFile = location.GetFiles($"*{SolutionExtension}").FirstOrDefault();
+            if (slnFile != null)
             {
-                ctx.IsInSolution = true;
+                ctx.SolutionName = Path.GetFileNameWithoutExtension(slnFile.Name);
             }
 
             // Определить тип проекта в каталоге и проанализировать его
@@ -84,7 +87,7 @@ namespace ProjectsInfo.Data
             {
                 var projectInfo = projectInfoAnalyzer.GetProjectInfo();
                 projectInfo.IsInGit = ctx.IsInGit;
-                projectInfo.IsInSolution = ctx.IsInSolution;
+                projectInfo.SolutionName = ctx.SolutionName;
 
                 progressReporter.Report(projectInfo);
             }
